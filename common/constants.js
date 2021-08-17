@@ -3,6 +3,4 @@ const API_ERRORS = {
   NO_ITEM_IN_DB: "There is no such item in the database"
 }
 
-module.exports = {
-  API_ERRORS
-}
+module.exports = { API_ERRORS }

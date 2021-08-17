@@ -2,8 +2,7 @@ const handleResponse = require('../common/handleResponse')
 const API_ERRORS = require('../../../common/constants')
 const data = require('../data.json')
 
-exports.handler  = async (event) => {
-  console.log('event: ', event)
+exports.handler = async (event) => {
   const { productId } = event.pathParameters || {}
 
   if (!productId) {
@@ -17,5 +16,5 @@ if (!product) {
   }
 
   return handleResponse({...product}, 200)
-
   };
+

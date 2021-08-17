@@ -5,12 +5,22 @@
   "main": "index.js",
   "scripts": {
     "deploy": "sls deploy",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@babel/plugin-transform-runtime": "^7.15.0",
+    "@babel/preset-env": "^7.15.0",
+    "jest": "^27.0.6",
     "serverless-webpack": "^5.5.1",
     "webpack": "^5.50.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "transformIgnorePatterns": [
+      "/node_modules/"
+    ]
   }
 }
