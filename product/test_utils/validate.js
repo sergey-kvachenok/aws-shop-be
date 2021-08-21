@@ -1,4 +1,4 @@
-const isApiGatewayResponse = response => {
+export const isApiGatewayResponse = response => {
     const { body, headers, statusCode } = response;
     console.log(response)
 
@@ -10,15 +10,10 @@ const isApiGatewayResponse = response => {
     return true;
 };
 
-const isCorrectHeaders = headers => {
+export const isCorrectHeaders = headers => {
     if (headers['Content-Type'] !== 'application/json') return false;
     if (headers['Access-Control-Allow-Methods'] !== '*') return false;
     if (headers['Access-Control-Allow-Origin'] !== '*') return false;
 
     return true;
 };
-
-module.exports = {
-    isApiGatewayResponse,
-    isCorrectHeaders
-}

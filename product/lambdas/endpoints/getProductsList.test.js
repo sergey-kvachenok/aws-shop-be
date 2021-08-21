@@ -1,10 +1,8 @@
 
-const getProductsList = require('./getProductsList');
-const { isApiGatewayResponse } = require('../../test_utils/validate');
-const generateEvent = require('../../test_utils/generateEvent');
-const data = require('../data.json')
-
-console.log(getProductsList)
+import { handler as getProductsList } from './getProductsList';
+import { isApiGatewayResponse } from '../../test_utils/validate';
+import generateEvent from '../../test_utils/generateEvent';
+import data from '../data.json'
 
 describe('getProductsList', () => {
     test('return the list of products', async () => {
@@ -14,7 +12,7 @@ describe('getProductsList', () => {
             },
         });
 
-        const res = await getProductsList.handler(event);
+        const res = await getProductsList(event);
 
         expect(res).toBeDefined();
         expect(isApiGatewayResponse(res)).toBe(true);

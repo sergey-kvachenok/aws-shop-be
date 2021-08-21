@@ -50,4 +50,4 @@ const APIGatewayRequest = ({
     return request;
 };
 
-module.exports =  APIGatewayRequest
+export default APIGatewayRequest

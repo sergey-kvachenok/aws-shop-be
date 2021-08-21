@@ -1,4 +1,4 @@
-const handleResponse = (data = {}, status=200) => ({
+export const handleResponse = (data = {}, status=200) => ({
   headers: {
            'Content-Type': 'application/json',
             'Access-Control-Allow-Methods': '*',
@@ -7,5 +7,3 @@ const handleResponse = (data = {}, status=200) => ({
   statusCode: status,
   body: JSON.stringify(data)
 })
-
-module.exports = handleResponse

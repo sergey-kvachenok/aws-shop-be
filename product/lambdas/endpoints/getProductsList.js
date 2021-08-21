@@ -1,8 +1,7 @@
-const handleResponse = require('../common/handleResponse')
-const data = require('../data.json')
+import { handleResponse } from '../common/handleResponse'
+import data from '../data.json'
 
-exports.handler = async (event) => {
+export const handler = async (event) => {
   console.log(event)
   return handleResponse(data)
   };
-

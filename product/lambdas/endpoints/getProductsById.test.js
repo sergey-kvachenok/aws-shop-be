@@ -1,19 +1,19 @@
-const getProductsById  = require('./getProductsById');
-const generateEvent = require('../../test_utils/generateEvent');
-const API_ERRORS = require('../../../common/constants')
-const data = require('../data.json')
+import { handler as getProductsById } from './getProductsById';
+import generateEvent from '../../test_utils/generateEvent';
+import API_ERRORS from '../../../common/constants'
+import data  from '../data.json'
 
 describe('getProductsById', () => {
     test('returns the correct product from the list', async () => {
       const dataItem = data[0]
 
          const event = generateEvent({
-            pathParametersObject: {
+            pathParametersObject: { 
                productId: dataItem.id
             },
         });
 
-        const res = await getProductsById.handler(event);
+        const res = await getProductsById(event);
         const receivedData = JSON.parse(res.body)
 
         expect(res).toBeDefined();
@@ -28,7 +28,7 @@ describe('getProductsById', () => {
             },
         });
 
-        const res = await getProductsById.handler(event);
+        const res = await getProductsById(event);
         const { message } = JSON.parse(res.body) || {}
        
         expect(res.statusCode).toBe(400)
@@ -43,7 +43,7 @@ describe('getProductsById', () => {
             },
         });
 
-        const res = await getProductsById.handler(event);
+        const res = await getProductsById(event);
         const { message } = JSON.parse(res.body) || {}
        
         expect(res.statusCode).toBe(400)

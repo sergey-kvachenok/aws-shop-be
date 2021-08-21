@@ -1,8 +1,8 @@
-const handleResponse = require('../common/handleResponse')
-const API_ERRORS = require('../../../common/constants')
-const data = require('../data.json')
+import { handleResponse } from '../common/handleResponse'
+import API_ERRORS from '../../../common/constants'
+import data  from '../data.json'
 
-exports.handler = async (event) => {
+export const handler = async (event) => {
   const { productId } = event.pathParameters || {}
 
   if (!productId) {
@@ -17,4 +17,3 @@ if (!product) {
 
   return handleResponse({...product}, 200)
   };
-
