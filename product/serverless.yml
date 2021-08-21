@@ -11,13 +11,7 @@ plugins:
   - serverless-webpack
 
 package:
-    individually: true
-
-# custom:
-#   webpack:
-#     includeModules: false
-#     package:
-#       individually: true
+  individually: true
 
 functions:
   getProductsList:
@@ -35,4 +29,3 @@ functions:
           path: products/{productId}
           method: GET
           cors: true
-

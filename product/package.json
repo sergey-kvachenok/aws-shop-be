@@ -6,17 +6,20 @@
   "scripts": {
     "deploy": "sls deploy",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "lint": "eslint *.js",
+    "prettier": "npx prettier --write ."
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.15.0",
     "@babel/node": "^7.14.9",
-    "@babel/plugin-transform-modules-commonjs": "^7.15.0",
     "@babel/plugin-transform-runtime": "^7.15.0",
     "@babel/preset-env": "^7.15.0",
+    "eslint-config-prettier": "^8.3.0",
     "jest": "^27.0.6",
+    "prettier": "^2.3.2",
     "serverless-webpack": "^5.5.1",
     "webpack": "^5.50.0"
   },
