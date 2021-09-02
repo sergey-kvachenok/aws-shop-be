@@ -7,3 +7,6 @@ jspm_packagesgit
 
 # Editors 
 .idea/
+
+# Environment
+.env

@@ -1,40 +1,102 @@
 openapi: 3.0.0
 info:
   title: Pranksome potato BE
-  description: Optional multiline or single-line description in [CommonMark](http://commonmark.org/help/) or HTML.
-  version: 0.1.9
+  description: BE implementation of Rolling scopes AWS course.
+  version: 1.1.1
 
 servers:
   - url: https://ufclbh8316.execute-api.eu-west-1.amazonaws.com/dev/
-    description: Optional server description, e.g. Main (production) server
+    description: Main server
 
 paths:
   /products:
     get:
       summary: Returns a list of products.
-      description: Optional extended description in CommonMark or HTML.
+      description: Products service
       responses:
-        '200': # status code
+        200:    # status code
           description: A JSON array of products
           content:
             application/json:
-              schema:
+              schema: 
                 type: array
-                items:
+                items: 
                   type: object
                   properties:
                     count:
                       type: number
+                      example: 10
                     description:
                       type: string
+                      example: "Delicious potato"
                     id:
                       type: string
+                      example: "7791816d-4051-4768-b12f-4e38c963490f"
                     price:
                       type: number
+                      example: 10
                     title:
                       type: string
+                      example: "Надежда"
                     imageId:
                       type: string
+                      example: "000054623"
+          
+    post:
+      summary: Create a new product in DB
+      description: Returns created product
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                price:
+                  type: integer
+                count:
+                  type: integer
+                image_id:
+                  type: string
+      responses:
+        200:
+          description: JSON object of created product
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  title:
+                   type: string
+                  description:
+                    type: string
+                  price:
+                    type: integer
+                  count:
+                    type: integer
+                  image_id:
+                    type: string
+              example:
+                title: "Test Potato"
+                description: "Delicious, good for mushpotato"
+                price: 7
+                image_id: "000054602"
+                count: 56
+        400:
+          description: Invalid productId
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Provided id is not correct"
+
 
   /products/{productId}:
     get:
@@ -49,7 +111,7 @@ paths:
             type: string
       responses:
         200:
-          description: Product fetched
+          description: Product successfully fetched
           content:
             application/json:
               schema:
@@ -57,16 +119,22 @@ paths:
                 properties:
                   count:
                     type: number
+                    example: 10
                   description:
                     type: string
+                    example: "Вкусная, подходит для жарки"
                   id:
                     type: string
+                    example: "Надежда по своим качествам где-то посередине между Сатурном и Леди Клер."
                   price:
                     type: number
+                    example: 7
                   title:
                     type: string
+                    example: "Надежда"
                   imageId:
                     type: string
+                    example: "000054623"
         400:
           description: JSON object with error messages
           content:
@@ -74,10 +142,6 @@ paths:
               schema:
                 type: object
                 properties:
-                  errors:
-                    type: object
-                    properties:
-                      message:
-                        type: string
-                    example:
-                      productId: 'Id from the path was not provided'
+                  message:
+                    type: string
+                    example: "Id from the path was not provided"
