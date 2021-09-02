@@ -2,25 +2,30 @@ openapi: 3.0.0
 info:
   title: Pranksome potato BE
   description: BE implementation of Rolling scopes AWS course.
-  version: 1.1.1
+  version: 1.2.2
 
 servers:
-  - url: https://ufclbh8316.execute-api.eu-west-1.amazonaws.com/dev/
-    description: Main server
+  - url: https://m6koseiub9.execute-api.eu-west-1.amazonaws.com/dev/
+    description: Product server
+
+  - url: https://bg552ona8f.execute-api.eu-west-1.amazonaws.com/dev/
+    description: Import server
 
 paths:
   /products:
     get:
       summary: Returns a list of products.
+      tags:
+        - Product
       description: Products service
       responses:
-        200:    # status code
+        200: # status code
           description: A JSON array of products
           content:
             application/json:
-              schema: 
+              schema:
                 type: array
-                items: 
+                items:
                   type: object
                   properties:
                     count:
@@ -28,22 +33,24 @@ paths:
                       example: 10
                     description:
                       type: string
-                      example: "Delicious potato"
+                      example: 'Delicious potato'
                     id:
                       type: string
-                      example: "7791816d-4051-4768-b12f-4e38c963490f"
+                      example: '7791816d-4051-4768-b12f-4e38c963490f'
                     price:
                       type: number
                       example: 10
                     title:
                       type: string
-                      example: "Надежда"
+                      example: 'Надежда'
                     imageId:
                       type: string
-                      example: "000054623"
-          
+                      example: '000054623'
+
     post:
       summary: Create a new product in DB
+      tags:
+        - Product
       description: Returns created product
       requestBody:
         required: true
@@ -71,7 +78,7 @@ paths:
                 type: object
                 properties:
                   title:
-                   type: string
+                    type: string
                   description:
                     type: string
                   price:
@@ -81,10 +88,10 @@ paths:
                   image_id:
                     type: string
               example:
-                title: "Test Potato"
-                description: "Delicious, good for mushpotato"
+                title: 'Test Potato'
+                description: 'Delicious, good for mushpotato'
                 price: 7
-                image_id: "000054602"
+                image_id: '000054602'
                 count: 56
         400:
           description: Invalid productId
@@ -95,12 +102,13 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: "Provided id is not correct"
-
+                    example: 'Provided id is not correct'
 
   /products/{productId}:
     get:
       summary: Returns a product by its id.
+      tags:
+        - Product
       description: Optional extended description in CommonMark or HTML.
       parameters:
         - in: path
@@ -122,19 +130,19 @@ paths:
                     example: 10
                   description:
                     type: string
-                    example: "Вкусная, подходит для жарки"
+                    example: 'Вкусная, подходит для жарки'
                   id:
                     type: string
-                    example: "Надежда по своим качествам где-то посередине между Сатурном и Леди Клер."
+                    example: 'Надежда по своим качествам где-то посередине между Сатурном и Леди Клер.'
                   price:
                     type: number
                     example: 7
                   title:
                     type: string
-                    example: "Надежда"
+                    example: 'Надежда'
                   imageId:
                     type: string
-                    example: "000054623"
+                    example: '000054623'
         400:
           description: JSON object with error messages
           content:
@@ -144,4 +152,48 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: "Id from the path was not provided"
+                    example: 'Id from the path was not provided'
+
+  /import:
+    get:
+      summary: Returns a SignedUrl to download a file into S3.
+      tags:
+        - Import
+      description: Optional extended description in CommonMark or HTML.
+      parameters:
+        - in: query
+          name: name
+          description: File name to download
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Product successfully fetched
+          content:
+            application/json:
+              schema:
+                type: string
+                example: 'https://test-bucket.s3.eu-west-1.amazonaws.com/uploaded/test.cvs?...'
+
+        400:
+          description: JSON object with error messages, when there are no file name or has a wrong extention
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Query parameters are invalid'
+
+        500:
+          description: JSON object with error messages, when any unhandled errors occured
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Something went wrong'

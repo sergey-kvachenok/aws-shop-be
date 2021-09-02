@@ -4,11 +4,80 @@ useDotenv: true
 provider:
   name: aws
   runtime: nodejs14.x
-  profile: admin
+  profile: ${env:PROFILE}
   stage: dev
   region: eu-west-1
   environment:
     BUCKET_NAME: ${self:custom.bucketName}
+    PG_HOST: ${env:PG_HOST}
+    PG_PORT: ${env:PG_PORT}
+    PG_DATABASE: ${env:PG_DATABASE}
+    PG_USERNAME: ${env:PG_USERNAME}
+    PG_PASSWORD: ${env:PG_PASSWORD}
+    SQS_URL:
+      Ref: SQSQueue
+    SNS_ARN:
+      Ref: SNSTopic
+
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action: s3:ListBucket
+          Resource:
+            - arn:aws:s3:::${self:custom.bucketName}
+
+        - Effect: Allow
+          Action:
+            - s3:*
+          Resource:
+            - arn:aws:s3:::${self:custom.bucketName}/* 
+
+        - Effect: Allow
+          Action: sqs:*
+          Resource:
+            Fn::GetAtt:
+              - SQSQueue
+              - Arn
+
+        - Effect: Allow
+          Action: sns:*
+          Resource:
+            Ref: SNSTopic
+    
+resources:
+  Resources:
+    SQSQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: catalogItemsQueue
+    
+    SNSTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: createProductTopic
+
+    SNSSubscription:
+      Type: AWS::SNS::Subscription
+      Properties:
+        Endpoint: idieshalvu@gmail.com
+        Protocol: email
+        TopicArn:
+          Ref: SNSTopic
+        FilterPolicy:
+          status: 
+            - "In Progress"
+
+    SNSFinishParsingSubscription:
+      Type: AWS::SNS::Subscription
+      Properties:
+        Endpoint: s.kvachonak@gmail.com
+        Protocol: email
+        TopicArn:
+          Ref: SNSTopic
+        FilterPolicy:
+          status: 
+            - "Done"
 
 plugins:
   - serverless-webpack
@@ -18,18 +87,7 @@ custom:
 
 package:
   individually: true
-
-iamRoleStatements:
-  - Effect: Allow
-    Action: s3:ListBucket
-    Resource:
-      - arn:aws:s3:::${self:custom.bucketName}
-  - Effect: Allow
-    Action:
-      - s3:*
-    Resource:
-      - arn:aws:s3:::${self:custom.bucketName}/*
-
+      
 functions:
   importProductsFile:
     handler: lambdas/endpoints/importProductsFile.handler
@@ -37,9 +95,11 @@ functions:
       - http:
           path: import
           method: GET
-          parameters:
-            queryStrings:
-              name: true
+          cors: true
+          request:
+            parameters:
+              querystrings:
+                name: true
 
   importFileParser:
     handler: lambdas/endpoints/importFileParser.handler
@@ -50,3 +110,13 @@ functions:
           rules:
             - prefix: uploaded/
           existing: true
+  
+  catalogBatchProcess:
+     handler: lambdas/endpoints/catalogBatchProcess.handler
+     events:
+      - sqs:
+          batchSize: 5
+          arn:
+            Fn::GetAtt:
+              - SQSQueue
+              - Arn

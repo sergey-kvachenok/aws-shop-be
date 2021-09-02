@@ -3,7 +3,6 @@ import { ConnectDB, dbOptions } from '../../postgres/client';
 import { API_ERRORS } from '../../../common/constants';
 
 export const handler = async event => {
-  console.log(event);
   const db = new ConnectDB(dbOptions);
   const client = await db.connect();
 

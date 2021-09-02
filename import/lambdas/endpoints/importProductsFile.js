@@ -40,7 +40,6 @@ export const handler = async event => {
 
     return handleResponse(url, 200);
   } catch (error) {
-    console.log('ERROR', error);
     return handleResponse({ message: error.message }, 500);
   }
 };
