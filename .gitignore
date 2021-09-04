@@ -1,6 +1,7 @@
 # package directories
 node_modules
 jspm_packagesgit
+./webpack
 
 # Serverless directories
 .serverless
