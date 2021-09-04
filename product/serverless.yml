@@ -1,0 +1,31 @@
+service: product-service
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  profile: admin
+  stage: dev
+  region: eu-west-1
+
+plugins:
+  - serverless-webpack
+
+package:
+  individually: true
+
+functions:
+  getProductsList:
+    handler: lambdas/endpoints/getProductsList.handler
+    events:
+      - http:
+          path: products
+          method: GET
+          cors: true
+
+  getProductsById:
+    handler: lambdas/endpoints/getProductsById.handler
+    events:
+      - http:
+          path: products/{productId}
+          method: GET
+          cors: true
