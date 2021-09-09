@@ -6,7 +6,8 @@ const API_ERRORS = {
   SOMETHING_WRONG: "Something went wrong",
   NO_TABLE_NAME: "Table name wasn't provided",
   INCORRECT_ID: "Provided id is not correct",
-  INCORRECT_PARAMS: "One or several parameters have incorrect type"
+  INCORRECT_PARAMS: "One or several parameters have incorrect type",
+  INVALID_QUERY_PARAMETRS: "Query parameters are invalid"
 }
 
 const REGEXP = {

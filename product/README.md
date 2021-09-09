@@ -21,3 +21,5 @@ All additional tasks are done.
 
 # Data for images and descriptions
 https://www.ogorod.ru/ru/ogorod/potatoes/13834/40-sortov-kartofelya-dlya-pyure-zharki-zapekaniya-i-kartoshki-fri.htm
+
+https://github.com/serverless-heaven/serverless-webpack/issues/950
