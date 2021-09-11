@@ -4,10 +4,18 @@ import { API_ERRORS } from '../../../common/constants';
 
 export const handler = async event => {
   console.log(process.env);
+  console.log('event', event);
+
   const { name } = event.queryStringParameters;
 
   if (!name) {
-    return handleResponse({ message: API_ERRORS.INVALID_QUERY_PARAMETRS });
+    return handleResponse({ message: API_ERRORS.INVALID_QUERY_PARAMETRS }, 400);
+  }
+
+  const isCsv = name.split('.')[1]?.toLowerCase() === 'csv';
+
+  if (!isCsv) {
+    return handleResponse({ message: API_ERRORS.INCORRECT_FILE_FORMAT }, 400);
   }
 
   const params = {
@@ -21,19 +29,18 @@ export const handler = async event => {
     const s3 = new AWS.S3({ region: 'eu-west-1' });
     const url = await new Promise((resolve, reject) => {
       return s3.getSignedUrl('putObject', params, (error, url) => {
-        console.log('s3', s3);
         if (error) {
-          console.log('internalError', error);
           reject(error);
         }
-        console.log('url', url);
         resolve(url);
       });
     });
-    console.log('here', handleResponse(url));
+
+    console.log('url', url);
+
     return handleResponse(url, 200);
   } catch (error) {
     console.log('ERROR', error);
-    return handleResponse({ message: error.message });
+    return handleResponse({ message: error.message }, 500);
   }
 };

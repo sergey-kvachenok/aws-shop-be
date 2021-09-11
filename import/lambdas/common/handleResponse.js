@@ -6,6 +6,6 @@ export const handleResponse = (data, status = 200) => {
       'Access-Control-Allow-Origin': '*',
     },
     statusCode: status,
-    body: JSON.stringify(data),
+    body: data,
   };
 };
