@@ -1,4 +1,5 @@
 service: product-service
+useDotenv: true
 
 provider:
   name: aws
@@ -6,6 +7,12 @@ provider:
   profile: admin
   stage: dev
   region: eu-west-1
+  environment:
+    PG_HOST: ${env:PG_HOST}
+    PG_PORT: ${env:PG_PORT}
+    PG_DATABASE: ${env:PG_DATABASE}
+    PG_USERNAME: ${env:PG_USERNAME}
+    PG_PASSWORD: ${env:PG_PASSWORD}
 
 plugins:
   - serverless-webpack
@@ -28,4 +35,12 @@ functions:
       - http:
           path: products/{productId}
           method: GET
+          cors: true
+
+  createProduct:
+    handler: lambdas/endpoints/createProduct.handler
+    events:
+      - http:
+          path: products
+          method: POST
           cors: true

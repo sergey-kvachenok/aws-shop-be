@@ -28,5 +28,9 @@
     "transformIgnorePatterns": [
       "/node_modules/"
     ]
+  },
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "pg": "^8.7.1"
   }
 }
