@@ -1,0 +1,21 @@
+service: authorization-service
+useDotenv: true
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  profile: ${env:PROFILE}
+  stage: dev
+  region: eu-west-1
+  environment:
+    sergey_kvachenok: ${env:sergey_kvachenok}
+
+plugins:
+  - serverless-webpack
+
+package:
+  individually: true
+      
+functions:
+  basicAuthorizer:
+    handler: lambdas/endpoints/basicAuthorizer.handler
