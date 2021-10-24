@@ -31,7 +31,7 @@ provider:
           Action:
             - s3:*
           Resource:
-            - arn:aws:s3:::${self:custom.bucketName}/* 
+            - arn:aws:s3:::${self:custom.bucketName}/*
 
         - Effect: Allow
           Action: sqs:*
@@ -44,14 +44,14 @@ provider:
           Action: sns:*
           Resource:
             Ref: SNSTopic
-    
+
 resources:
   Resources:
     SQSQueue:
       Type: AWS::SQS::Queue
       Properties:
         QueueName: catalogItemsQueue
-    
+
     SNSTopic:
       Type: AWS::SNS::Topic
       Properties:
@@ -65,7 +65,7 @@ resources:
         TopicArn:
           Ref: SNSTopic
         FilterPolicy:
-          status: 
+          status:
             - "In Progress"
 
     SNSFinishParsingSubscription:
@@ -76,8 +76,39 @@ resources:
         TopicArn:
           Ref: SNSTopic
         FilterPolicy:
-          status: 
+          status:
             - "Done"
+
+    RestApi:
+      Type: AWS::ApiGateway::RestApi
+      Properties:
+        Name: pranksome-potato-shop
+    GatewayResponseDefault4XX:
+      Type: AWS::ApiGateway::GatewayResponse
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: DEFAULT_4XX
+        RestApiId: !Ref RestApi
+
+    GatewayResponseUnauthorized:
+      Type: AWS::ApiGateway::GatewayResponse
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: UNAUTHORIZED
+        RestApiId: !Ref RestApi
+
+    GatewayResponseDefault5XX:
+      Type: AWS::ApiGateway::GatewayResponse
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: DEFAULT_5XX
+        RestApiId: !Ref RestApi
 
 plugins:
   - serverless-webpack
@@ -87,7 +118,7 @@ custom:
 
 package:
   individually: true
-      
+
 functions:
   importProductsFile:
     handler: lambdas/endpoints/importProductsFile.handler
@@ -100,6 +131,13 @@ functions:
             parameters:
               querystrings:
                 name: true
+          authorizer:
+            name: basicAuthorizer
+            arn: ${env:AUTHORIZER_ARN}
+            resultTtlInSeconds: 0
+            identitySource: method.request.header.Authorization
+            type: token
+
 
   importFileParser:
     handler: lambdas/endpoints/importFileParser.handler
@@ -110,7 +148,7 @@ functions:
           rules:
             - prefix: uploaded/
           existing: true
-  
+
   catalogBatchProcess:
      handler: lambdas/endpoints/catalogBatchProcess.handler
      events:

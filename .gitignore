@@ -1,12 +1,13 @@
 # package directories
 node_modules
 jspm_packagesgit
-./webpack
+./**/webpack
+.elasticbeanstalk
 
 # Serverless directories
 .serverless
 
-# Editors 
+# Editors
 .idea/
 
 # Environment
