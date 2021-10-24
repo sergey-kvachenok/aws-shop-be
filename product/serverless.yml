@@ -4,7 +4,7 @@ useDotenv: true
 provider:
   name: aws
   runtime: nodejs14.x
-  profile: admin
+  profile: pranksome-potato-admin
   stage: dev
   region: eu-west-1
   environment:
